@@ -68,17 +68,17 @@ a confirmation with a reference number — no manager action required.
 
 ### Implementation for User Story 1
 
-- [ ] T017 [P] [US1] Create `ExpenseClaim` ORM model in `backend/src/models/expense_claim.py` (id, employee_id, amount, currency, expense_date, category_id FK, merchant_name, receipt_path, status enum, submitted_at, reviewed_by, reviewed_at, parent_claim_id FK)
-- [ ] T018 [P] [US1] Create `ViolationFlag` ORM model in `backend/src/models/violation_flag.py` (id, claim_id FK, rule_id FK, status enum, raised_at, resolved_by, resolved_at, resolution_note)
-- [ ] T019 [US1] Implement `PolicyEngineService` in `backend/src/services/policy_engine.py` — evaluates a claim against all enabled PolicyRules in order: spending_cap → receipt_required → weekend_policy → duplicate_detection → auto_approve_threshold; caches rules in process memory, invalidates when `policy_rules.updated_at` changes (satisfies SC-007)
-- [ ] T020 [US1] Implement `ClaimService.submit_claim()` in `backend/src/services/claim_service.py` — validate inputs, call PolicyEngineService, set claim status (`approved` or `pending_review`), create ViolationFlag records for any triggered rules, return claim with status
-- [ ] T021 [US1] Add receipt file upload handler in `backend/src/services/receipt_store.py` — accept JPEG/PNG/PDF ≤10 MB, save to configured volume path, return stored path; reject corrupt/unreadable files with descriptive error
-- [ ] T022 [US1] Implement `POST /api/v1/claims` route in `backend/src/api/claims.py` — accept multipart form (claim fields + receipt file), call ClaimService.submit_claim(), return claim id and status; enforce employee role
-- [ ] T023 [US1] Implement `GET /api/v1/claims/{claim_id}` route in `backend/src/api/claims.py` — return claim detail for the authenticated employee who owns it
-- [ ] T024 [P] [US1] Create claim submission form page in `frontend/src/pages/employee/SubmitClaimPage.tsx` — fields: amount, category (dropdown), expense date, merchant name, receipt upload; show validation errors inline
-- [ ] T025 [P] [US1] Create `useSubmitClaim` React Query mutation hook in `frontend/src/services/claims.ts` — POST to `/api/v1/claims`, handle multipart encoding, return claim status
-- [ ] T026 [US1] Create claim confirmation component in `frontend/src/components/ClaimConfirmation.tsx` — display reference number and status (auto-approved or pending review) after successful submission
-- [ ] T027 [US1] Wire submission form → mutation hook → confirmation in `frontend/src/pages/employee/SubmitClaimPage.tsx`; display policy rejection reasons inline when backend returns 422
+- [x] T017 [P] [US1] Create `ExpenseClaim` ORM model in `backend/src/models/expense_claim.py` (id, employee_id, amount, currency, expense_date, category_id FK, merchant_name, receipt_path, status enum, submitted_at, reviewed_by, reviewed_at, parent_claim_id FK)
+- [x] T018 [P] [US1] Create `ViolationFlag` ORM model in `backend/src/models/violation_flag.py` (id, claim_id FK, rule_id FK, status enum, raised_at, resolved_by, resolved_at, resolution_note)
+- [x] T019 [US1] Implement `PolicyEngineService` in `backend/src/services/policy_engine.py` — evaluates a claim against all enabled PolicyRules in order: spending_cap → receipt_required → weekend_policy → duplicate_detection → auto_approve_threshold; caches rules in process memory, invalidates when `policy_rules.updated_at` changes (satisfies SC-007)
+- [x] T020 [US1] Implement `ClaimService.submit_claim()` in `backend/src/services/claim_service.py` — validate inputs, call PolicyEngineService, set claim status (`approved` or `pending_review`), create ViolationFlag records for any triggered rules, return claim with status
+- [x] T021 [US1] Add receipt file upload handler in `backend/src/services/receipt_store.py` — accept JPEG/PNG/PDF ≤10 MB, save to configured volume path, return stored path; reject corrupt/unreadable files with descriptive error
+- [x] T022 [US1] Implement `POST /api/v1/claims` route in `backend/src/api/claims.py` — accept multipart form (claim fields + receipt file), call ClaimService.submit_claim(), return claim id and status; enforce employee role
+- [x] T023 [US1] Implement `GET /api/v1/claims/{claim_id}` route in `backend/src/api/claims.py` — return claim detail for the authenticated employee who owns it
+- [x] T024 [P] [US1] Create claim submission form page in `frontend/src/pages/employee/SubmitClaimPage.tsx` — fields: amount, category (dropdown), expense date, merchant name, receipt upload; show validation errors inline
+- [x] T025 [P] [US1] Create `useSubmitClaim` React Query mutation hook in `frontend/src/services/claims.ts` — POST to `/api/v1/claims`, handle multipart encoding, return claim status
+- [x] T026 [US1] Create claim confirmation component in `frontend/src/components/ClaimConfirmation.tsx` — display reference number and status (auto-approved or pending review) after successful submission
+- [x] T027 [US1] Wire submission form → mutation hook → confirmation in `frontend/src/pages/employee/SubmitClaimPage.tsx`; display policy rejection reasons inline when backend returns 422
 
 **Checkpoint**: User Story 1 fully functional — employee can submit, system validates and auto-approves or routes; confirmation displayed
 
