@@ -161,12 +161,12 @@ or reject it). Then clear the flag with a note. Confirm the claim returns to nor
 
 **Purpose**: Improvements and hardening that affect multiple user stories
 
-- [ ] T053 [P] Create admin policy configuration page in `frontend/src/pages/admin/PolicyConfigPage.tsx` — list and edit spending caps, auto-approve threshold, receipt-exemption thresholds, weekend-policy toggle (satisfies FR-015)
-- [ ] T054 [P] Implement `GET /api/v1/admin/policy-rules`, `PATCH /api/v1/admin/policy-rules/{id}` routes in `backend/src/api/admin.py` — update rule threshold/enforcement_action; set `updated_at` on save to trigger cache invalidation in PolicyEngineService
-- [ ] T055 Add global error boundary in `frontend/src/components/ErrorBoundary.tsx` and map backend 422 validation errors to user-friendly field-level messages in `frontend/src/services/api.ts`
-- [ ] T056 [P] Add structured request logging middleware in `backend/src/main.py` — log method, path, status code, duration for every request
-- [ ] T057 [P] Seed initial data script in `backend/src/db/seed.py` — create default expense categories (Meal cap $25, Travel, Accommodation, Other) and default policy rules (auto-approve $50, receipt exemption $0 for Meal)
-- [ ] T058 Run quickstart.md validation scenarios end-to-end and resolve any gaps
+- [x] T053 [P] Create admin policy configuration page in `frontend/src/pages/admin/PolicyConfigPage.tsx` — list and edit spending caps, auto-approve threshold, receipt-exemption thresholds, weekend-policy toggle (satisfies FR-015)
+- [x] T054 [P] Implement `GET /api/v1/admin/policy-rules`, `PATCH /api/v1/admin/policy-rules/{id}` routes in `backend/src/api/admin.py` — update rule threshold/enforcement_action; set `updated_at` on save to trigger cache invalidation in PolicyEngineService
+- [x] T055 Add global error boundary in `frontend/src/components/ErrorBoundary.tsx` and map backend 422 validation errors to user-friendly field-level messages in `frontend/src/services/api.ts`
+- [x] T056 [P] Add structured request logging middleware in `backend/src/main.py` — log method, path, status code, duration for every request
+- [x] T057 [P] Seed initial data script in `backend/src/db/seed.py` — create default expense categories (Meal cap $25, Travel, Accommodation, Other) and default policy rules (auto-approve $50, receipt exemption $0 for Meal)
+- [x] T058 Run quickstart.md validation scenarios end-to-end and resolve any gaps
 
 ---
 

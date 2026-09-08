@@ -1,4 +1,6 @@
+import logging
 import os
+import time
 from typing import List
 
 from fastapi import FastAPI, Request
@@ -6,6 +8,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from backend.src.api import admin, audit, claims, manager, notifications
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger("expense_api")
 
 app = FastAPI(title="Expense Reimbursement API", version="0.1.0")
 
@@ -18,6 +23,15 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.middleware("http")
+async def log_requests(request: Request, call_next):
+    start = time.monotonic()
+    response = await call_next(request)
+    duration_ms = round((time.monotonic() - start) * 1000, 1)
+    logger.info("%s %s %d %.1fms", request.method, request.url.path, response.status_code, duration_ms)
+    return response
 
 
 @app.exception_handler(422)

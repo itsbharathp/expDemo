@@ -3,6 +3,7 @@ import React, { Suspense, lazy } from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import AppLayout from './components/AppLayout'
+import { ErrorBoundary } from './components/ErrorBoundary'
 import NotFoundPage from './pages/NotFoundPage'
 import UnauthorizedPage from './pages/UnauthorizedPage'
 import { getCurrentUser } from './services/auth'
@@ -30,24 +31,26 @@ function RoleRedirect() {
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <AppLayout>
-          <Suspense fallback={<div>Loading…</div>}>
-            <Routes>
-              <Route path="/" element={<RoleRedirect />} />
-              <Route path="/employee/submit" element={<SubmitClaimPage />} />
-              <Route path="/manager/queue" element={<ReviewQueuePage />} />
-              <Route path="/manager/claims/:claim_id" element={<ClaimDetailPage />} />
-              <Route path="/auditor/dashboard" element={<AuditDashboardPage />} />
-              <Route path="/auditor/claims/:claim_id" element={<AuditClaimDetailPage />} />
-              <Route path="/admin/policy" element={<PolicyConfigPage />} />
-              <Route path="/unauthorized" element={<UnauthorizedPage />} />
-              <Route path="*" element={<NotFoundPage />} />
-            </Routes>
-          </Suspense>
-        </AppLayout>
-      </BrowserRouter>
-    </QueryClientProvider>
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+          <AppLayout>
+            <Suspense fallback={<div>Loading…</div>}>
+              <Routes>
+                <Route path="/" element={<RoleRedirect />} />
+                <Route path="/employee/submit" element={<SubmitClaimPage />} />
+                <Route path="/manager/queue" element={<ReviewQueuePage />} />
+                <Route path="/manager/claims/:claim_id" element={<ClaimDetailPage />} />
+                <Route path="/auditor/dashboard" element={<AuditDashboardPage />} />
+                <Route path="/auditor/claims/:claim_id" element={<AuditClaimDetailPage />} />
+                <Route path="/admin/policy" element={<PolicyConfigPage />} />
+                <Route path="/unauthorized" element={<UnauthorizedPage />} />
+                <Route path="*" element={<NotFoundPage />} />
+              </Routes>
+            </Suspense>
+          </AppLayout>
+        </BrowserRouter>
+      </QueryClientProvider>
+    </ErrorBoundary>
   </React.StrictMode>
 )

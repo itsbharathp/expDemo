@@ -57,3 +57,24 @@ export const api = {
   patch: <T>(path: string, body: unknown) => request<T>('PATCH', path, body),
   postForm: <T>(path: string, formData: FormData) => postForm<T>(path, formData),
 }
+
+interface FastAPIValidationError {
+  loc: (string | number)[]
+  msg: string
+  type: string
+}
+
+export function parseValidationErrors(error: unknown): Record<string, string> {
+  if (!error || typeof error !== 'object') return {}
+  const detail = (error as { detail?: unknown }).detail
+  if (!Array.isArray(detail)) {
+    if (typeof detail === 'string') return { _error: detail }
+    return {}
+  }
+  const result: Record<string, string> = {}
+  for (const item of detail as FastAPIValidationError[]) {
+    const field = item.loc?.length ? item.loc[item.loc.length - 1] : '_error'
+    result[String(field)] = item.msg
+  }
+  return result
+}
