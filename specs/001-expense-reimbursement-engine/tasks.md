@@ -95,18 +95,18 @@ an in-app notification — without needing the auditor flow.
 
 ### Implementation for User Story 2
 
-- [ ] T028 [P] [US2] Create `ApprovalDecision` ORM model in `backend/src/models/approval_decision.py` (id, claim_id FK, actor_id, action enum, note, decided_at)
-- [ ] T029 [P] [US2] Create `Notification` ORM model in `backend/src/models/notification.py` (id, recipient_id, claim_id FK, event_type enum, message, is_read, created_at)
-- [ ] T030 [US2] Implement `ClaimService.get_manager_queue()` in `backend/src/services/claim_service.py` — return claims in `pending_review` status assigned to the requesting manager (respects FR-014: manager ≠ claimant)
-- [ ] T031 [US2] Implement `ClaimService.decide_claim()` in `backend/src/services/claim_service.py` — accept approve/reject + optional note, create ApprovalDecision record, update claim status, trigger notification
-- [ ] T032 [US2] Implement `NotificationService.send()` in `backend/src/services/notification_service.py` — create in-app Notification record; if SMTP configured, dispatch email via FastAPI BackgroundTasks
-- [ ] T033 [US2] Implement `GET /api/v1/manager/claims` route in `backend/src/api/manager.py` — return pending review queue for authenticated manager; enforce manager role
-- [ ] T034 [US2] Implement `POST /api/v1/manager/claims/{claim_id}/decision` route in `backend/src/api/manager.py` — accept `{"action": "approved"|"rejected", "note": "..."}`, call ClaimService.decide_claim()
-- [ ] T035 [US2] Implement `GET /api/v1/notifications` route in `backend/src/api/notifications.py` — return unread notifications for authenticated employee; `PATCH /api/v1/notifications/{id}/read` to mark read
-- [ ] T036 [P] [US2] Create manager review queue page in `frontend/src/pages/manager/ReviewQueuePage.tsx` — list pending claims with policy violation badges, sorted by submission date
-- [ ] T037 [P] [US2] Create claim detail view for managers in `frontend/src/pages/manager/ClaimDetailPage.tsx` — show all claim fields, violation flags highlighted, approve/reject form with optional comment field
-- [ ] T038 [US2] Create notification bell component in `frontend/src/components/NotificationBell.tsx` — poll `GET /api/v1/notifications` every 30 seconds, show unread count badge, mark as read on click
-- [ ] T039 [US2] Add notification bell to shared app layout in `frontend/src/components/AppLayout.tsx`
+- [x] T028 [P] [US2] Create `ApprovalDecision` ORM model in `backend/src/models/approval_decision.py` (id, claim_id FK, actor_id, action enum, note, decided_at)
+- [x] T029 [P] [US2] Create `Notification` ORM model in `backend/src/models/notification.py` (id, recipient_id, claim_id FK, event_type enum, message, is_read, created_at)
+- [x] T030 [US2] Implement `ClaimService.get_manager_queue()` in `backend/src/services/claim_service.py` — return claims in `pending_review` status assigned to the requesting manager (respects FR-014: manager ≠ claimant)
+- [x] T031 [US2] Implement `ClaimService.decide_claim()` in `backend/src/services/claim_service.py` — accept approve/reject + optional note, create ApprovalDecision record, update claim status, trigger notification
+- [x] T032 [US2] Implement `NotificationService.send()` in `backend/src/services/notification_service.py` — create in-app Notification record; if SMTP configured, dispatch email via FastAPI BackgroundTasks
+- [x] T033 [US2] Implement `GET /api/v1/manager/claims` route in `backend/src/api/manager.py` — return pending review queue for authenticated manager; enforce manager role
+- [x] T034 [US2] Implement `POST /api/v1/manager/claims/{claim_id}/decision` route in `backend/src/api/manager.py` — accept `{"action": "approved"|"rejected", "note": "..."}`, call ClaimService.decide_claim()
+- [x] T035 [US2] Implement `GET /api/v1/notifications` route in `backend/src/api/notifications.py` — return unread notifications for authenticated employee; `PATCH /api/v1/notifications/{id}/read` to mark read
+- [x] T036 [P] [US2] Create manager review queue page in `frontend/src/pages/manager/ReviewQueuePage.tsx` — list pending claims with policy violation badges, sorted by submission date
+- [x] T037 [P] [US2] Create claim detail view for managers in `frontend/src/pages/manager/ClaimDetailPage.tsx` — show all claim fields, violation flags highlighted, approve/reject form with optional comment field
+- [x] T038 [US2] Create notification bell component in `frontend/src/components/NotificationBell.tsx` — poll `GET /api/v1/notifications` every 30 seconds, show unread count badge, mark as read on click
+- [x] T039 [US2] Add notification bell to shared app layout in `frontend/src/components/AppLayout.tsx`
 
 **Checkpoint**: User Stories 1 and 2 complete — full claim lifecycle from submission through manager decision functional
 

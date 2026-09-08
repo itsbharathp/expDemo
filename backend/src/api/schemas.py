@@ -19,3 +19,20 @@ class ClaimResponse(BaseModel):
     receipt_path: Optional[str]
     status: str
     submitted_at: datetime
+
+
+class DecisionRequest(BaseModel):
+    action: str
+    note: Optional[str] = None
+
+
+class NotificationResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: UUID
+    recipient_id: UUID
+    claim_id: UUID
+    event_type: str
+    message: str
+    is_read: bool
+    created_at: datetime

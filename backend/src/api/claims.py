@@ -13,7 +13,7 @@ from backend.src.models.user import CurrentUser
 from backend.src.services.claim_service import ClaimService
 from backend.src.services.receipt_store import ReceiptStore
 
-router = APIRouter(prefix="/claims", tags=["claims"])
+router = APIRouter(tags=["claims"])
 _claim_svc = ClaimService()
 _receipt_store = ReceiptStore()
 
