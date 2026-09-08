@@ -27,12 +27,12 @@ Web application layout: `backend/src/`, `frontend/src/`
 
 **Purpose**: Project initialization and basic structure
 
-- [ ] T001 Create directory structure: `backend/`, `frontend/`, `backend/src/`, `backend/tests/`, `frontend/src/`, `frontend/tests/`
-- [ ] T002 Initialize Python project in `backend/` with `pyproject.toml` (FastAPI 0.111, SQLAlchemy 2.x, Alembic, httpx, pytest)
-- [ ] T003 Initialize TypeScript/React 18 project in `frontend/` with `package.json` (React Router 6, React Query, Vitest, React Testing Library)
-- [ ] T004 [P] Create `docker-compose.yml` at repo root with backend, frontend, and PostgreSQL 16 services
-- [ ] T005 [P] Create `.env.example` at repo root documenting all required environment variables (DB URL, secret key, SMTP settings)
-- [ ] T006 [P] Configure linting and formatting: `ruff` in `backend/pyproject.toml`, ESLint + Prettier in `frontend/.eslintrc.json`
+- [x] T001 Create directory structure: `backend/`, `frontend/`, `backend/src/`, `backend/tests/`, `frontend/src/`, `frontend/tests/`
+- [x] T002 Initialize Python project in `backend/` with `pyproject.toml` (FastAPI 0.111, SQLAlchemy 2.x, Alembic, httpx, pytest)
+- [x] T003 Initialize TypeScript/React 18 project in `frontend/` with `package.json` (React Router 6, React Query, Vitest, React Testing Library)
+- [x] T004 [P] Create `docker-compose.yml` at repo root with backend, frontend, and PostgreSQL 16 services
+- [x] T005 [P] Create `.env.example` at repo root documenting all required environment variables (DB URL, secret key, SMTP settings)
+- [x] T006 [P] Configure linting and formatting: `ruff` in `backend/pyproject.toml`, ESLint + Prettier in `frontend/.eslintrc.json`
 
 ---
 
@@ -42,16 +42,16 @@ Web application layout: `backend/src/`, `frontend/src/`
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T007 Create Alembic migration environment in `backend/src/db/` and initial migration script `backend/src/db/migrations/versions/001_initial_schema.py` with all tables (expense_claims, expense_categories, policy_rules, violation_flags, approval_decisions, notifications) and their downgrade steps
-- [ ] T008 Create SQLAlchemy base model and session factory in `backend/src/db/session.py`
-- [ ] T009 [P] Create `ExpenseCategory` ORM model in `backend/src/models/expense_category.py` (id, name, spending_cap, receipt_exemption_threshold, is_active)
-- [ ] T010 [P] Create `PolicyRule` ORM model in `backend/src/models/policy_rule.py` (id, rule_type enum, name, threshold_value, enforcement_action enum, category_id FK, is_enabled, updated_at)
-- [ ] T011 [P] Create `User` read-only integration model in `backend/src/models/user.py` (id, name, role enum, manager_id, department — sourced from JWT claims, not DB-managed)
-- [ ] T012 Create FastAPI app entry point in `backend/src/main.py` with CORS middleware, versioned router prefix `/api/v1/`, and global exception handlers
-- [ ] T013 Implement JWT authentication middleware in `backend/src/api/deps.py` — validate bearer token, extract user role and id, inject as dependency into route handlers
-- [ ] T014 [P] Create React app entry point in `frontend/src/main.tsx` with React Router 6 routes and React Query `QueryClientProvider`
-- [ ] T015 [P] Implement API client with auth token header injection in `frontend/src/services/api.ts`
-- [ ] T016 Implement role-based route guards in `frontend/src/services/auth.ts` — redirect unauthorized roles to their appropriate landing page
+- [x] T007 Create Alembic migration environment in `backend/src/db/` and initial migration script `backend/src/db/migrations/versions/001_initial_schema.py` with all tables (expense_claims, expense_categories, policy_rules, violation_flags, approval_decisions, notifications) and their downgrade steps
+- [x] T008 Create SQLAlchemy base model and session factory in `backend/src/db/session.py`
+- [x] T009 [P] Create `ExpenseCategory` ORM model in `backend/src/models/expense_category.py` (id, name, spending_cap, receipt_exemption_threshold, is_active)
+- [x] T010 [P] Create `PolicyRule` ORM model in `backend/src/models/policy_rule.py` (id, rule_type enum, name, threshold_value, enforcement_action enum, category_id FK, is_enabled, updated_at)
+- [x] T011 [P] Create `User` read-only integration model in `backend/src/models/user.py` (id, name, role enum, manager_id, department — sourced from JWT claims, not DB-managed)
+- [x] T012 Create FastAPI app entry point in `backend/src/main.py` with CORS middleware, versioned router prefix `/api/v1/`, and global exception handlers
+- [x] T013 Implement JWT authentication middleware in `backend/src/api/deps.py` — validate bearer token, extract user role and id, inject as dependency into route handlers
+- [x] T014 [P] Create React app entry point in `frontend/src/main.tsx` with React Router 6 routes and React Query `QueryClientProvider`
+- [x] T015 [P] Implement API client with auth token header injection in `frontend/src/services/api.ts`
+- [x] T016 Implement role-based route guards in `frontend/src/services/auth.ts` — redirect unauthorized roles to their appropriate landing page
 
 **Checkpoint**: Foundation ready — user story implementation can now begin
 

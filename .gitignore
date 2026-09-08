@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+*.egg-info/
+dist/
+build/
+.mypy_cache/
+.ruff_cache/
+
+# Node
+node_modules/
+dist/
+build/
+.next/
+.nuxt/
+coverage/
+*.log
+
+# Environment — never commit real secrets
+.env
+.env.local
+.env.*.local
+# but keep the example
+!.env.example
+
+# Docker
+.dockerignore
+
+# Universal
+.DS_Store
+Thumbs.db
+*.tmp
+*.swp
+*.swo
+.vscode/
+.idea/
+*.orig
