@@ -4,7 +4,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from backend.src.api.deps import get_current_user, get_db
+from backend.src.api.deps import get_current_user
+from backend.src.db.session import get_db
 from backend.src.api.schemas import NotificationResponse
 from backend.src.models.notification import Notification
 from backend.src.models.user import CurrentUser

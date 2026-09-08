@@ -47,6 +47,6 @@ async def health() -> dict:
 api_prefix = "/api/v1"
 app.include_router(claims.router, prefix=f"{api_prefix}/claims", tags=["Claims"])
 app.include_router(manager.router, prefix=f"{api_prefix}/manager", tags=["Manager"])
-app.include_router(audit.router, prefix=f"{api_prefix}/audit", tags=["Audit"])
-app.include_router(admin.router, prefix=f"{api_prefix}/admin", tags=["Admin"])
+app.include_router(audit.router, prefix=f"{api_prefix}", tags=["Audit"])
+app.include_router(admin.router, prefix=f"{api_prefix}", tags=["Admin"])
 app.include_router(notifications.router, prefix=f"{api_prefix}/notifications", tags=["Notifications"])

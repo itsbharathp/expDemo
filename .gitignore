@@ -39,3 +39,9 @@ Thumbs.db
 .vscode/
 .idea/
 *.orig
+expense.db
+receipts/
+frontend/package-lock.json
+.venv/
+*.pyc
+__pycache__/

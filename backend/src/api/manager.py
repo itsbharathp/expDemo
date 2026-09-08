@@ -3,7 +3,8 @@ from uuid import UUID
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from backend.src.api.deps import get_db, require_manager
+from backend.src.api.deps import require_manager
+from backend.src.db.session import get_db
 from backend.src.api.schemas import ClaimResponse, DecisionRequest
 from backend.src.models.user import CurrentUser
 from backend.src.services.claim_service import ClaimService
