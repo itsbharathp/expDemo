@@ -11,6 +11,7 @@ const SubmitClaimPage = lazy(() => import('./pages/employee/SubmitClaimPage'))
 const ReviewQueuePage = lazy(() => import('./pages/manager/ReviewQueuePage'))
 const ClaimDetailPage = lazy(() => import('./pages/manager/ClaimDetailPage'))
 const AuditDashboardPage = lazy(() => import('./pages/auditor/AuditDashboardPage'))
+const AuditClaimDetailPage = lazy(() => import('./pages/auditor/AuditClaimDetailPage'))
 const PolicyConfigPage = lazy(() => import('./pages/admin/PolicyConfigPage'))
 
 const queryClient = new QueryClient()
@@ -39,6 +40,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
               <Route path="/manager/queue" element={<ReviewQueuePage />} />
               <Route path="/manager/claims/:claim_id" element={<ClaimDetailPage />} />
               <Route path="/auditor/dashboard" element={<AuditDashboardPage />} />
+              <Route path="/auditor/claims/:claim_id" element={<AuditClaimDetailPage />} />
               <Route path="/admin/policy" element={<PolicyConfigPage />} />
               <Route path="/unauthorized" element={<UnauthorizedPage />} />
               <Route path="*" element={<NotFoundPage />} />

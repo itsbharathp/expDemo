@@ -123,11 +123,11 @@ employee cannot submit without acknowledgement, and auto-approval does not trigg
 
 ### Implementation for User Story 3
 
-- [ ] T040 [US3] Add `WeekendPolicyRule` evaluation to `PolicyEngineService` in `backend/src/services/policy_engine.py` — check if `expense_date` is Saturday or Sunday in org timezone; if so, set enforcement_action to `require_review` and create ViolationFlag (FR-007); check for valid pre-approved exception before flagging
-- [ ] T041 [US3] Create `WeekendException` ORM model in `backend/src/models/weekend_exception.py` (id, employee_id, date_from, date_to, approved_by, created_at) and add to migration in `backend/src/db/migrations/versions/002_weekend_exceptions.py`
-- [ ] T042 [US3] Implement `GET /api/v1/admin/weekend-exceptions` and `POST /api/v1/admin/weekend-exceptions` routes in `backend/src/api/admin.py` — allow admins to create pre-approved exceptions; enforce admin role
-- [ ] T043 [US3] Update submission form in `frontend/src/pages/employee/SubmitClaimPage.tsx` — display inline weekend-policy warning banner when selected expense date is a Saturday or Sunday, before form submission
-- [ ] T044 [US3] Verify weekend flag appears in manager claim detail view in `frontend/src/pages/manager/ClaimDetailPage.tsx` — weekend policy flag must be prominently displayed with the expense date (may require no code change if flag rendering is already generic)
+- [x] T040 [US3] Add `WeekendPolicyRule` evaluation to `PolicyEngineService` in `backend/src/services/policy_engine.py` — check if `expense_date` is Saturday or Sunday in org timezone; if so, set enforcement_action to `require_review` and create ViolationFlag (FR-007); check for valid pre-approved exception before flagging
+- [x] T041 [US3] Create `WeekendException` ORM model in `backend/src/models/weekend_exception.py` (id, employee_id, date_from, date_to, approved_by, created_at) and add to migration in `backend/src/db/migrations/versions/002_weekend_exceptions.py`
+- [x] T042 [US3] Implement `GET /api/v1/admin/weekend-exceptions` and `POST /api/v1/admin/weekend-exceptions` routes in `backend/src/api/admin.py` — allow admins to create pre-approved exceptions; enforce admin role
+- [x] T043 [US3] Update submission form in `frontend/src/pages/employee/SubmitClaimPage.tsx` — display inline weekend-policy warning banner when selected expense date is a Saturday or Sunday, before form submission
+- [x] T044 [US3] Verify weekend flag appears in manager claim detail view in `frontend/src/pages/manager/ClaimDetailPage.tsx` — weekend policy flag must be prominently displayed with the expense date (may require no code change if flag rendering is already generic)
 
 **Checkpoint**: Weekend policy enforced at submission; exceptions manageable by admin
 
@@ -144,14 +144,14 @@ or reject it). Then clear the flag with a note. Confirm the claim returns to nor
 
 ### Implementation for User Story 4
 
-- [ ] T045 [US4] Implement `AuditService.get_flagged_claims()` in `backend/src/services/audit_service.py` — return all claims with active ViolationFlags, filterable by violation type, date range, employee id
-- [ ] T046 [US4] Implement `AuditService.investigate_claim()` and `AuditService.clear_flag()` in `backend/src/services/audit_service.py` — set ViolationFlag status to `under_investigation` (locks claim) or `cleared` (requires non-empty resolution_note); create ApprovalDecision record for each auditor action
-- [ ] T047 [US4] Enforce claim lock in `ClaimService.decide_claim()` in `backend/src/services/claim_service.py` — reject manager approve/reject actions if any ViolationFlag on the claim is `under_investigation` (FR-012)
-- [ ] T048 [US4] Implement `GET /api/v1/audit/claims` route in `backend/src/api/audit.py` — return flagged claims with filter params (`violation_type`, `date_from`, `date_to`, `employee_id`); enforce auditor role
-- [ ] T049 [US4] Implement `POST /api/v1/audit/claims/{claim_id}/investigate` and `POST /api/v1/audit/claims/{claim_id}/clear` routes in `backend/src/api/audit.py`
-- [ ] T050 [P] [US4] Create audit dashboard page in `frontend/src/pages/auditor/AuditDashboardPage.tsx` — table of flagged claims with violation type badges, filter controls (type, date range, employee)
-- [ ] T051 [P] [US4] Create auditor claim detail page in `frontend/src/pages/auditor/AuditClaimDetailPage.tsx` — show claim fields, all violation flags with status, "Mark for Investigation" and "Clear Flag" action buttons; clear flag requires text input for resolution note
-- [ ] T052 [US4] Update duplicate detection in `PolicyEngineService` in `backend/src/services/policy_engine.py` — query for existing claims with same employee_id, amount, and merchant_name within a 7-day window; flag both claims (FR-008)
+- [x] T045 [US4] Implement `AuditService.get_flagged_claims()` in `backend/src/services/audit_service.py` — return all claims with active ViolationFlags, filterable by violation type, date range, employee id
+- [x] T046 [US4] Implement `AuditService.investigate_claim()` and `AuditService.clear_flag()` in `backend/src/services/audit_service.py` — set ViolationFlag status to `under_investigation` (locks claim) or `cleared` (requires non-empty resolution_note); create ApprovalDecision record for each auditor action
+- [x] T047 [US4] Enforce claim lock in `ClaimService.decide_claim()` in `backend/src/services/claim_service.py` — reject manager approve/reject actions if any ViolationFlag on the claim is `under_investigation` (FR-012)
+- [x] T048 [US4] Implement `GET /api/v1/audit/claims` route in `backend/src/api/audit.py` — return flagged claims with filter params (`violation_type`, `date_from`, `date_to`, `employee_id`); enforce auditor role
+- [x] T049 [US4] Implement `POST /api/v1/audit/claims/{claim_id}/investigate` and `POST /api/v1/audit/claims/{claim_id}/clear` routes in `backend/src/api/audit.py`
+- [x] T050 [P] [US4] Create audit dashboard page in `frontend/src/pages/auditor/AuditDashboardPage.tsx` — table of flagged claims with violation type badges, filter controls (type, date range, employee)
+- [x] T051 [P] [US4] Create auditor claim detail page in `frontend/src/pages/auditor/AuditClaimDetailPage.tsx` — show claim fields, all violation flags with status, "Mark for Investigation" and "Clear Flag" action buttons; clear flag requires text input for resolution note
+- [x] T052 [US4] Update duplicate detection in `PolicyEngineService` in `backend/src/services/policy_engine.py` — query for existing claims with same employee_id, amount, and merchant_name within a 7-day window; flag both claims (FR-008)
 
 **Checkpoint**: All four user stories complete — full feature functional end-to-end
 

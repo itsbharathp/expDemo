@@ -36,3 +36,43 @@ class NotificationResponse(BaseModel):
     message: str
     is_read: bool
     created_at: datetime
+
+
+class WeekendExceptionRequest(BaseModel):
+    employee_id: UUID
+    date_from: date
+    date_to: date
+
+
+class WeekendExceptionResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: UUID
+    employee_id: UUID
+    date_from: date
+    date_to: date
+    approved_by: UUID
+    created_at: datetime
+
+
+class ClearFlagRequest(BaseModel):
+    resolution_note: str
+
+
+class PolicyRuleResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: UUID
+    rule_type: str
+    name: str
+    threshold_value: Optional[Decimal]
+    enforcement_action: str
+    category_id: Optional[UUID]
+    is_enabled: bool
+    updated_at: datetime
+
+
+class PolicyRuleUpdateRequest(BaseModel):
+    threshold_value: Optional[Decimal] = None
+    enforcement_action: Optional[str] = None
+    is_enabled: Optional[bool] = None
