@@ -1,0 +1,20 @@
+.policy-table-threshold {
+  width: 100px;
+}
+
+.policy-table-enforcement {
+  min-width: 140px;
+}
+
+.policy-save-feedback {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 8px;
+  font-size: var(--font-text-sm-size);
+}
+
+.policy-page-hint {
+  font-size: var(--font-text-sm-size);
+  color: var(--color-text-tertiary);
+  margin: -16px 0 24px 0;
+}

@@ -2,8 +2,10 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import React, { Suspense, lazy } from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import './theme.css'
 import AppLayout from './components/AppLayout'
 import { ErrorBoundary } from './components/ErrorBoundary'
+import LoginPage from './pages/LoginPage'
 import NotFoundPage from './pages/NotFoundPage'
 import UnauthorizedPage from './pages/UnauthorizedPage'
 import { getCurrentUser } from './services/auth'
@@ -44,6 +46,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
                 <Route path="/auditor/dashboard" element={<AuditDashboardPage />} />
                 <Route path="/auditor/claims/:claim_id" element={<AuditClaimDetailPage />} />
                 <Route path="/admin/policy" element={<PolicyConfigPage />} />
+                <Route path="/login" element={<LoginPage />} />
                 <Route path="/unauthorized" element={<UnauthorizedPage />} />
                 <Route path="*" element={<NotFoundPage />} />
               </Routes>

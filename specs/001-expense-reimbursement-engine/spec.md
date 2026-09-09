@@ -15,6 +15,12 @@
 - Q: What is the spending cap and receipt rule for the Meal expense category? → A: Meal cap is $25; a receipt is required for all meal claims regardless of amount.
 - Q: What dollar amount should serve as the global auto-approve threshold? → A: $50.
 
+### Session 2026-09-08 (Issue #59 — Frontend Redesign)
+
+- Q: Should the redesign use Claude design token CSS variables directly or hardcoded hex values? → A: Define a theme.css with Claude tokens as CSS custom properties with hardcoded hex defaults — works standalone and is portable.
+- Q: Should the redesign support dark mode or light mode only? → A: Light mode only for this pass; add TODO comment in theme.css for future dark mode.
+- Q: Should inline styles be replaced with CSS classes or kept as hybrid? → A: Full CSS class replacement — one styles.css per component, inline only for computed/dynamic values.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Submit an Expense Claim (Priority: P1)

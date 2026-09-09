@@ -1,0 +1,5 @@
+.review-queue-ref {
+  font-family: var(--font-mono);
+  font-size: var(--font-text-xs-size);
+  color: var(--color-text-secondary);
+}

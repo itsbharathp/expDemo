@@ -1,0 +1,55 @@
+.app-header {
+  background: var(--color-background-inverse);
+  height: 56px;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.app-header-logo {
+  font-size: var(--font-heading-lg-size);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-inverse);
+  letter-spacing: -0.01em;
+}
+
+.app-header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.app-header-user {
+  font-size: var(--font-text-sm-size);
+  color: rgba(250, 249, 245, 0.75);
+}
+
+.app-header-user span {
+  text-transform: capitalize;
+}
+
+.app-header-signout {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--color-text-inverse);
+  font-family: var(--font-sans);
+  font-size: var(--font-text-xs-size);
+  font-weight: var(--font-weight-medium);
+  padding: 6px 12px;
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  min-height: 32px;
+  transition: background 0.15s;
+}
+.app-header-signout:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.app-main {
+  padding: 0;
+  min-height: calc(100vh - 56px);
+}

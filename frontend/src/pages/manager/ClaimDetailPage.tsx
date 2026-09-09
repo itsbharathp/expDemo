@@ -1,16 +1,10 @@
 import React, { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
+import './ClaimDetailPage.css'
 import { api } from '../../services/api'
 import { useDecideClaim } from '../../services/manager'
 import type { ClaimResponse } from '../../services/claims'
-
-const FLAG_COLORS: Record<string, string> = {
-  weekend_policy: '#f97316',
-  duplicate_detection: '#eab308',
-  spending_cap: '#ef4444',
-  receipt_required: '#8b5cf6',
-}
 
 export default function ClaimDetailPage() {
   const { claim_id } = useParams<{ claim_id: string }>()
@@ -27,8 +21,8 @@ export default function ClaimDetailPage() {
 
   const decideMutation = useDecideClaim()
 
-  if (isLoading) return <div style={{ padding: 24 }}>Loading claim…</div>
-  if (isError || !claim) return <div style={{ padding: 24, color: 'red' }}>Claim not found.</div>
+  if (isLoading) return <div className="state-loading">Loading claim…</div>
+  if (isError || !claim) return <div className="state-error">Claim not found.</div>
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -45,64 +39,89 @@ export default function ClaimDetailPage() {
     }
   }
 
+  const rows: [string, string][] = [
+    ['Reference', claim.id.slice(0, 8)],
+    ['Amount', `${claim.currency} ${claim.amount}`],
+    ['Merchant', claim.merchant_name],
+    ['Expense Date', claim.expense_date],
+    ['Status', claim.status],
+    ['Submitted', new Date(claim.submitted_at).toLocaleString()],
+  ]
+
   return (
-    <div style={{ padding: 24, maxWidth: 640 }}>
-      <button onClick={() => navigate('/manager/queue')} style={{ marginBottom: 16 }}>
+    <div className="page-container claim-detail-page">
+      <button className="btn-back" onClick={() => navigate('/manager/queue')}>
         ← Back to Queue
       </button>
-      <h2>Claim Detail</h2>
 
-      <table style={{ width: '100%', marginBottom: 24 }}>
-        <tbody>
-          {[
-            ['Reference', claim.id.slice(0, 8)],
-            ['Amount', `${claim.currency} ${claim.amount}`],
-            ['Merchant', claim.merchant_name],
-            ['Expense Date', claim.expense_date],
-            ['Status', claim.status],
-            ['Submitted', new Date(claim.submitted_at).toLocaleString()],
-          ].map(([label, value]) => (
-            <tr key={label}>
-              <td style={{ fontWeight: 600, padding: '6px 12px 6px 0', width: 140 }}>{label}</td>
-              <td style={{ padding: '6px 0' }}>{value}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <h1 className="page-header">Claim Detail</h1>
 
-      <h3>Policy Flags</h3>
-      {/* violation_flags not in ClaimResponse yet; show placeholder */}
-      <p style={{ color: '#6b7280', fontSize: 14 }}>
-        Violation flags are displayed here when the claims API includes flag data.
-      </p>
+      <div className="card" style={{ marginBottom: 24 }}>
+        <table className="detail-table">
+          <tbody>
+            {rows.map(([label, value]) => (
+              <tr key={label}>
+                <td>{label}</td>
+                <td>
+                  {label === 'Status'
+                    ? <span className={`badge badge-${value}`}>{value.replace('_', ' ')}</span>
+                    : value}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
 
-      <h3>Decision</h3>
-      <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: 12 }}>
-          <label style={{ marginRight: 16 }}>
-            <input type="radio" name="action" value="approved"
-              checked={action === 'approved'} onChange={() => setAction('approved')} />
-            {' '}Approve
-          </label>
-          <label>
-            <input type="radio" name="action" value="rejected"
-              checked={action === 'rejected'} onChange={() => setAction('rejected')} />
-            {' '}Reject
-          </label>
+        <div className="claim-detail-flags">
+          <h3>Policy Flags</h3>
+          <p className="claim-detail-flags-empty">
+            Violation flags are displayed here when the claims API includes flag data.
+          </p>
         </div>
-        <textarea
-          placeholder={action === 'rejected' ? 'Reason (required)' : 'Optional comment'}
-          value={note}
-          onChange={e => setNote(e.target.value)}
-          rows={3}
-          style={{ width: '100%', padding: 8, marginBottom: 8 }}
-        />
-        {submitError && <p style={{ color: 'red', marginBottom: 8 }}>{submitError}</p>}
-        <button type="submit" disabled={decideMutation.isPending}
-          style={{ background: action === 'approved' ? '#16a34a' : '#dc2626', color: '#fff', padding: '8px 20px', border: 'none', borderRadius: 4 }}>
-          {decideMutation.isPending ? 'Submitting…' : action === 'approved' ? 'Approve Claim' : 'Reject Claim'}
-        </button>
-      </form>
+
+        <div className="claim-detail-decision">
+          <h3>Decision</h3>
+          <form onSubmit={handleSubmit}>
+            <div className="claim-detail-radios">
+              <label className="claim-detail-radio-label">
+                <input type="radio" name="action" value="approved"
+                  checked={action === 'approved'} onChange={() => setAction('approved')} />
+                Approve
+              </label>
+              <label className="claim-detail-radio-label">
+                <input type="radio" name="action" value="rejected"
+                  checked={action === 'rejected'} onChange={() => setAction('rejected')} />
+                Reject
+              </label>
+            </div>
+
+            <div className="form-group">
+              <textarea
+                className="form-textarea"
+                placeholder={action === 'rejected' ? 'Reason (required)' : 'Optional comment'}
+                value={note}
+                onChange={e => setNote(e.target.value)}
+                rows={3}
+              />
+            </div>
+
+            {submitError && <p className="inline-error">{submitError}</p>}
+
+            <div className="claim-detail-actions">
+              <button
+                type="submit"
+                disabled={decideMutation.isPending}
+                className={action === 'approved' ? 'btn-success' : 'btn-danger'}
+              >
+                {decideMutation.isPending ? 'Submitting…' : action === 'approved' ? 'Approve Claim' : 'Reject Claim'}
+              </button>
+              <button type="button" className="btn-secondary" onClick={() => navigate('/manager/queue')}>
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   )
 }

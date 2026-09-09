@@ -1,4 +1,6 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
+import './AppLayout.css'
 import NotificationBell from './NotificationBell'
 import { getCurrentUser } from '../services/auth'
 
@@ -8,25 +10,32 @@ interface AppLayoutProps {
 
 export default function AppLayout({ children }: AppLayoutProps) {
   const user = getCurrentUser()
+  const navigate = useNavigate()
+
+  function logout() {
+    localStorage.removeItem('auth_token')
+    navigate('/login', { replace: true })
+  }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#f9fafb' }}>
-      <header style={{
-        background: '#1e40af', color: '#fff',
-        padding: '0 24px', height: 56,
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-      }}>
-        <span style={{ fontWeight: 700, fontSize: 18 }}>Expense Reimbursement</span>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+    <div>
+      <header className="app-header">
+        <span className="app-header-logo">Expense Reimbursement</span>
+        <div className="app-header-right">
           {user && (
-            <span style={{ fontSize: 13, opacity: 0.85 }}>
-              {user.name} · <span style={{ textTransform: 'capitalize' }}>{user.role}</span>
+            <span className="app-header-user">
+              {user.name} · <span>{user.role}</span>
             </span>
           )}
-          <NotificationBell />
+          {user && <NotificationBell />}
+          {user && (
+            <button className="app-header-signout" onClick={logout}>
+              Sign out
+            </button>
+          )}
         </div>
       </header>
-      <main style={{ padding: 24 }}>{children}</main>
+      <main className="app-main">{children}</main>
     </div>
   )
 }

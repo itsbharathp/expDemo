@@ -250,3 +250,72 @@ With two or more developers after Phase 2 completes:
 - Constitution Principle III (Test-First) applies: tests must be authored and fail before implementation if added
 - Commit after each task or logical group; stop at any checkpoint to validate independently
 - T040 modifies T019's service file — coordinate if parallelizing US1 and US3
+
+---
+
+## Phase 8: Issue #59 — Frontend Redesign (Claude Design Guidelines)
+
+**Purpose**: Apply the Claude MCP Apps design system (token colors, typography, spacing, radius,
+shadows) to all existing frontend pages and components. No backend changes.
+
+**Design contract**: `specs/001-expense-reimbursement-engine/contracts/ui-design.md`
+
+**Goal**: Every page uses CSS custom property tokens from a single `theme.css`; all structural
+inline styles replaced with CSS classes; status badges use semantic color pairs; header uses
+inverse (dark) background.
+
+**Independent Test**: Open http://localhost:5173 as each role and verify the visual checklist
+in `specs/001-expense-reimbursement-engine/quickstart.md` (Issue #59 section) — warm background,
+dark header, white cards, semantic badge colors, correct typography.
+
+### Phase 8a: Foundation — Token System
+
+- [x] T059 Create `frontend/src/theme.css` — define all Claude design token CSS custom properties with hardcoded light-mode hex defaults (colors, typography, radius, shadows); add `/* TODO: dark mode */` comment; import in `frontend/src/main.tsx`
+- [x] T060 Add global CSS reset in `frontend/src/theme.css` — set `box-sizing: border-box`, `margin: 0`, `font-family: var(--font-sans)`, `background: var(--color-background-tertiary)` on `body`
+
+### Phase 8b: Shared Components (parallelizable after T059–T060)
+
+- [x] T061 [P] Create `frontend/src/components/AppLayout.css` — header bar uses `--color-background-inverse` (#141413), white logo/text; `.sign-out-btn` secondary style; replace all inline styles in `AppLayout.tsx`
+- [x] T062 [P] Create `frontend/src/components/NotificationBell.css` — dropdown card uses `--color-background-primary`, `--shadow-md`, `--border-radius-md`; unread count uses danger pill badge; replace all inline styles in `NotificationBell.tsx`
+- [x] T063 [P] Create `frontend/src/components/ClaimConfirmation.css` — confirmation card uses `.card`, status result uses `.badge-*` classes; replace all inline styles in `ClaimConfirmation.tsx`
+
+### Phase 8c: Page Redesigns (parallelizable after T059–T060)
+
+- [x] T064 [P] [US1] Create `frontend/src/pages/LoginPage.css` — centered `.card` on `--color-background-tertiary` page; JWT textarea, demo user buttons use `.btn-secondary`; primary sign-in uses `.btn-primary`; replace all inline styles in `LoginPage.tsx`
+- [x] T065 [P] [US1] Create `frontend/src/pages/employee/SubmitClaimPage.css` — form inside `.card`, all labels/inputs/selects/errors use `.form-*` classes, submit button uses `.btn-primary`; replace all inline styles in `SubmitClaimPage.tsx`
+- [x] T066 [P] [US2] Create `frontend/src/pages/manager/ReviewQueuePage.css` — claims list uses `.data-table` with status `.badge-*` per row; replace all inline styles in `ReviewQueuePage.tsx`
+- [x] T067 [P] [US2] Create `frontend/src/pages/manager/ClaimDetailPage.css` — detail card uses `.card`, policy-flag list uses `.badge-flagged`, approve button `.btn-primary`, reject button `.btn-danger`; replace all inline styles in `ClaimDetailPage.tsx`
+- [x] T068 [P] [US4] Create `frontend/src/pages/auditor/AuditDashboardPage.css` — flagged claims table uses `.data-table`, violation-type chips use `.badge-*`; replace all inline styles in `AuditDashboardPage.tsx`
+- [x] T069 [P] [US4] Create `frontend/src/pages/auditor/AuditClaimDetailPage.css` — flag cards use `.card-section`, investigate/clear buttons use appropriate `.btn-*`; replace all inline styles in `AuditClaimDetailPage.tsx`
+- [x] T070 [P] Create `frontend/src/pages/admin/PolicyConfigPage.css` — policy rules in `.data-table` or `.card` list, editable inputs use `.form-input`, save button uses `.btn-primary`; replace all inline styles in `PolicyConfigPage.tsx`
+- [x] T071 [P] Create `frontend/src/pages/NotFoundPage.css` and `frontend/src/pages/UnauthorizedPage.css` — center message on page bg, use `.card` and `.btn-secondary`; replace all inline styles
+
+### Phase 8d: Validation & Close
+
+- [x] T072 Run `cd frontend && npm run build` — verify zero TypeScript errors and clean Vite build
+- [x] T073 Manually verify visual checklist from `specs/001-expense-reimbursement-engine/quickstart.md` Issue #59 section at http://localhost:5173 — all checks must pass
+- [x] T074 Commit all `theme.css`, `*.css`, and updated `.tsx` files with message `feat: apply Claude design guidelines to all frontend pages (closes #59)`
+
+## Phase 8 Dependencies
+
+- **T059–T060** (token foundation): No dependencies — start immediately
+- **T061–T063** (shared components): Depend on T059
+- **T064–T071** (pages): Depend on T059; can all run in parallel
+- **T072–T074** (validation + commit): Depend on all page tasks complete
+
+## Parallel Example: Phase 8
+
+```
+# Start immediately:
+T059 Create theme.css
+T060 Add global reset
+
+# Then launch all in parallel (after T059–T060 complete):
+T061 AppLayout.css       T062 NotificationBell.css  T063 ClaimConfirmation.css
+T064 LoginPage.css       T065 SubmitClaimPage.css    T066 ReviewQueuePage.css
+T067 ClaimDetailPage.css T068 AuditDashboardPage.css T069 AuditClaimDetailPage.css
+T070 PolicyConfigPage.css T071 NotFoundPage+UnauthorizedPage
+
+# Sequential (after all above):
+T072 → T073 → T074
+```

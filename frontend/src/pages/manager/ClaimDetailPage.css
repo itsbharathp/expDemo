@@ -1,0 +1,45 @@
+.claim-detail-page {
+  max-width: 680px;
+}
+
+.claim-detail-flags {
+  margin-bottom: 24px;
+}
+
+.claim-detail-flags h3 {
+  font-size: var(--font-heading-lg-size);
+  font-weight: var(--font-weight-semibold);
+  margin: 0 0 12px 0;
+}
+
+.claim-detail-flags-empty {
+  font-size: var(--font-text-sm-size);
+  color: var(--color-text-tertiary);
+}
+
+.claim-detail-decision h3 {
+  font-size: var(--font-heading-lg-size);
+  font-weight: var(--font-weight-semibold);
+  margin: 0 0 16px 0;
+}
+
+.claim-detail-radios {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 16px;
+}
+
+.claim-detail-radio-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--font-text-sm-size);
+  color: var(--color-text-primary);
+  cursor: pointer;
+}
+
+.claim-detail-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}

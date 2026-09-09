@@ -1,0 +1,31 @@
+.claim-confirmation {
+  max-width: 480px;
+  margin: 48px auto;
+  padding: 0 24px;
+  text-align: center;
+}
+
+.claim-confirmation h2 {
+  font-size: var(--font-heading-xl-size);
+  font-weight: var(--font-weight-bold);
+  margin: 0 0 8px 0;
+}
+
+.claim-confirmation-ref {
+  font-size: var(--font-text-sm-size);
+  color: var(--color-text-secondary);
+  margin: 0 0 16px 0;
+}
+
+.claim-confirmation-ref strong {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  font-family: var(--font-mono);
+}
+
+.claim-confirmation-message {
+  font-size: var(--font-text-sm-size);
+  color: var(--color-text-secondary);
+  margin: 16px 0 24px 0;
+  line-height: var(--font-text-sm-line-height);
+}

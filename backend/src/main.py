@@ -3,11 +3,14 @@ import os
 import time
 from typing import List
 
-from fastapi import FastAPI, Request
+from fastapi import Depends, FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from sqlalchemy import select
 
 from backend.src.api import admin, audit, claims, manager, notifications
+from backend.src.db.session import get_db
+from backend.src.models.expense_category import ExpenseCategory
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("expense_api")
@@ -42,6 +45,12 @@ async def validation_exception_handler(request: Request, exc: Exception) -> JSON
 @app.get("/health", tags=["Health"])
 async def health() -> dict:
     return {"status": "ok"}
+
+
+@app.get("/api/v1/categories", tags=["Categories"])
+async def list_categories(db=Depends(get_db)):
+    result = await db.execute(select(ExpenseCategory).order_by(ExpenseCategory.name))
+    return [{"id": str(c.id), "name": c.name, "spending_cap": str(c.spending_cap)} for c in result.scalars().all()]
 
 
 api_prefix = "/api/v1"

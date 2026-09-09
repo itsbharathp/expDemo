@@ -1,16 +1,10 @@
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { useClearFlag, useInvestigateClaim } from '../../services/audit'
 import { useQuery } from '@tanstack/react-query'
+import './AuditClaimDetailPage.css'
+import { useClearFlag, useInvestigateClaim } from '../../services/audit'
 import { api } from '../../services/api'
 import type { ClaimResponse } from '../../services/claims'
-
-const FLAG_COLORS: Record<string, string> = {
-  weekend_policy: '#f97316',
-  duplicate_detection: '#eab308',
-  spending_cap: '#ef4444',
-  receipt_required: '#8b5cf6',
-}
 
 export default function AuditClaimDetailPage() {
   const { claim_id } = useParams<{ claim_id: string }>()
@@ -52,89 +46,91 @@ export default function AuditClaimDetailPage() {
     }
   }
 
-  if (isLoading) return <div style={{ padding: 24 }}>Loading claim…</div>
-  if (isError || !claim) return <div style={{ padding: 24, color: 'red' }}>Claim not found.</div>
+  if (isLoading) return <div className="state-loading">Loading claim…</div>
+  if (isError || !claim) return <div className="state-error">Claim not found.</div>
+
+  const rows: [string, string][] = [
+    ['Reference', claim.id.slice(0, 8)],
+    ['Full ID', claim.id],
+    ['Employee ID', claim.employee_id],
+    ['Amount', `${claim.currency} ${claim.amount}`],
+    ['Merchant', claim.merchant_name],
+    ['Expense Date', claim.expense_date],
+    ['Status', claim.status],
+    ['Submitted', new Date(claim.submitted_at).toLocaleString()],
+    ['Receipt', claim.receipt_path ?? 'None'],
+  ]
 
   return (
-    <div style={{ padding: 24, maxWidth: 640 }}>
-      <button onClick={() => navigate('/auditor/dashboard')} style={{ marginBottom: 16 }}>
+    <div className="page-container" style={{ maxWidth: 680 }}>
+      <button className="btn-back" onClick={() => navigate('/auditor/dashboard')}>
         ← Back to Dashboard
       </button>
-      <h2>Audit Claim Detail</h2>
 
-      <table style={{ width: '100%', marginBottom: 24 }}>
-        <tbody>
-          {[
-            ['Reference', claim.id.slice(0, 8)],
-            ['Full ID', claim.id],
-            ['Employee ID', claim.employee_id],
-            ['Amount', `${claim.currency} ${claim.amount}`],
-            ['Merchant', claim.merchant_name],
-            ['Expense Date', claim.expense_date],
-            ['Status', claim.status],
-            ['Submitted', new Date(claim.submitted_at).toLocaleString()],
-            ['Receipt', claim.receipt_path ?? 'None'],
-          ].map(([label, value]) => (
-            <tr key={label}>
-              <td style={{ fontWeight: 600, padding: '6px 12px 6px 0', width: 140, verticalAlign: 'top' }}>{label}</td>
-              <td style={{ padding: '6px 0', wordBreak: 'break-all', fontSize: 14 }}>{value}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <h1 className="page-header">Audit Claim Detail</h1>
 
-      <h3>Violation Flags</h3>
-      <p style={{ color: '#6b7280', fontSize: 14, marginBottom: 16 }}>
-        This claim carries at least one active violation flag. Use the actions below to investigate or clear.
-      </p>
+      <div className="card" style={{ marginBottom: 24 }}>
+        <table className="detail-table">
+          <tbody>
+            {rows.map(([label, value]) => (
+              <tr key={label}>
+                <td>{label}</td>
+                <td style={{ wordBreak: 'break-all' }}>
+                  {label === 'Status'
+                    ? <span className={`badge badge-${value}`}>{value.replace('_', ' ')}</span>
+                    : value}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
-      {actionError && <p style={{ color: 'red', marginBottom: 12 }}>{actionError}</p>}
+      <div className="card">
+        <h2 className="page-subheader">Violation Flags</h2>
+        <div className="card-section" style={{ marginBottom: 20 }}>
+          <p style={{ margin: 0, fontSize: 'var(--font-text-sm-size)', color: 'var(--color-text-secondary)' }}>
+            This claim carries at least one active violation flag. Use the actions below to investigate or clear.
+          </p>
+        </div>
 
-      <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-        <button
-          onClick={handleInvestigate}
-          disabled={investigateMutation.isPending}
-          style={{
-            padding: '8px 18px',
-            background: '#f59e0b',
-            color: '#fff',
-            border: 'none',
-            borderRadius: 4,
-            cursor: 'pointer',
-            opacity: investigateMutation.isPending ? 0.6 : 1,
-          }}
-        >
-          {investigateMutation.isPending ? 'Processing…' : 'Mark for Investigation'}
-        </button>
+        {actionError && <p className="inline-error">{actionError}</p>}
 
-        {!showClearInput ? (
+        <div className="audit-detail-actions">
           <button
-            onClick={() => setShowClearInput(true)}
-            style={{ padding: '8px 18px', background: '#6b7280', color: '#fff', border: 'none', borderRadius: 4, cursor: 'pointer' }}
+            className="btn-warning"
+            onClick={handleInvestigate}
+            disabled={investigateMutation.isPending}
           >
-            Clear Flag
+            {investigateMutation.isPending ? 'Processing…' : 'Mark for Investigation'}
           </button>
-        ) : (
-          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
-            <input
-              type="text"
-              placeholder="Resolution note (required)…"
-              value={clearNote}
-              onChange={e => setClearNote(e.target.value)}
-              style={{ padding: '7px 10px', minWidth: 260 }}
-            />
-            <button
-              onClick={handleClear}
-              disabled={clearMutation.isPending}
-              style={{ padding: '7px 14px', background: '#16a34a', color: '#fff', border: 'none', borderRadius: 4, cursor: 'pointer' }}
-            >
-              {clearMutation.isPending ? 'Clearing…' : 'Confirm Clear'}
+
+          {!showClearInput ? (
+            <button className="btn-secondary" onClick={() => setShowClearInput(true)}>
+              Clear Flag
             </button>
-            <button onClick={() => setShowClearInput(false)} style={{ padding: '7px 10px' }}>
-              Cancel
-            </button>
-          </div>
-        )}
+          ) : (
+            <div className="audit-clear-form">
+              <input
+                className="form-input"
+                type="text"
+                placeholder="Resolution note (required)…"
+                value={clearNote}
+                onChange={e => setClearNote(e.target.value)}
+              />
+              <button
+                className="btn-success"
+                onClick={handleClear}
+                disabled={clearMutation.isPending}
+              >
+                {clearMutation.isPending ? 'Clearing…' : 'Confirm Clear'}
+              </button>
+              <button className="btn-secondary" onClick={() => setShowClearInput(false)}>
+                Cancel
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   )

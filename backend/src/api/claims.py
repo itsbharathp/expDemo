@@ -6,7 +6,7 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, File, Form, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from backend.src.api.deps import get_current_user, require_employee
+from backend.src.api.deps import require_employee
 from backend.src.api.schemas import ClaimResponse
 from backend.src.db.session import get_db
 from backend.src.models.user import CurrentUser

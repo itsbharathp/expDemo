@@ -1,0 +1,22 @@
+.submit-claim-page {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+
+.submit-claim-page h2 {
+  font-size: var(--font-heading-xl-size);
+  font-weight: var(--font-weight-bold);
+  margin: 0 0 24px 0;
+}
+
+.submit-claim-weekend-hint {
+  display: block;
+  font-size: var(--font-text-sm-size);
+  color: var(--color-text-warning);
+  margin-top: 4px;
+}
+
+.submit-claim-actions {
+  margin-top: 24px;
+}

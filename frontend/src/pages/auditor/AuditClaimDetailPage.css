@@ -1,0 +1,19 @@
+.audit-detail-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  margin-top: 8px;
+}
+
+.audit-clear-form {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.audit-clear-form .form-input {
+  width: auto;
+  min-width: 260px;
+}

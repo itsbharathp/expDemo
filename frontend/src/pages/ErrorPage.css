@@ -1,0 +1,33 @@
+.error-page {
+  min-height: calc(100vh - 56px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.error-page-card {
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+}
+
+.error-page-code {
+  font-size: 48px;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-tertiary);
+  margin: 0 0 8px 0;
+  line-height: 1;
+}
+
+.error-page-title {
+  font-size: var(--font-heading-lg-size);
+  font-weight: var(--font-weight-semibold);
+  margin: 0 0 8px 0;
+}
+
+.error-page-message {
+  font-size: var(--font-text-sm-size);
+  color: var(--color-text-secondary);
+  margin: 0 0 24px 0;
+}

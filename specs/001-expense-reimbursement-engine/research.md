@@ -92,3 +92,78 @@ Five states total. Rejected claims may be corrected and resubmitted; a resubmitt
 re-enters the Submitted state and is re-evaluated from scratch.
 **Note**: Q2 was interrupted by `/speckit-plan` invocation. Defaulting to Option B (the
 recommended answer) per the clarification session context.
+
+---
+
+## Issue #59 — Frontend Redesign Research
+
+### CSS Token Architecture
+
+**Decision**: Single `frontend/src/theme.css` file defining all Claude design-system tokens as
+CSS custom properties with hardcoded light-mode hex defaults. Imported once in `main.tsx`.
+**Rationale**: Standalone Vite app cannot rely on the Claude host injecting `var(--color-*)` at
+runtime. Defining the variables locally preserves token semantics (so future host injection just
+works) while ensuring correct rendering today. Clarification Q1 answer B.
+**Alternatives considered**: Tailwind config (adds build dependency); styled-components
+(runtime CSS-in-JS overhead not needed for this scope); raw inline hex (no theming path).
+**TODO**: Add `@media (prefers-color-scheme: dark)` overrides when dark mode is required
+(clarification Q2 deferred to a future pass).
+
+### Styling Architecture
+
+**Decision**: One `styles.css` per component/page file, co-located alongside the `.tsx` file.
+Inline `style={{}}` props only for computed/dynamic values (e.g., badge colors driven by status
+enum). All structural, typographic, and spacing styles move to CSS classes.
+**Rationale**: Clarification Q3 answer A. Keeps component files readable, enables browser
+devtools inspection by class name, and removes the inline-style maintenance burden.
+**Alternatives considered**: CSS Modules (scoping benefit not needed for this small app);
+single global stylesheet (naming collision risk at scale).
+
+### Claude Design Token Mapping to Components
+
+**Decision**: Apply the following token mapping consistently across all pages:
+
+| Element | Token | Light value |
+|---|---|---|
+| Page background | `--color-background-tertiary` | `#FAF9F5` |
+| Card/panel background | `--color-background-primary` | `#FFFFFF` |
+| Secondary surface | `--color-background-secondary` | `#F5F4ED` |
+| Primary text | `--color-text-primary` | `#141413` |
+| Secondary text | `--color-text-secondary` | `#3D3D3A` |
+| Muted/caption text | `--color-text-tertiary` | `#73726C` |
+| Primary border | `--color-border-primary` | `rgba(31,30,29,0.4)` |
+| Tertiary border | `--color-border-tertiary` | `rgba(31,30,29,0.15)` |
+| Primary button bg | `--color-background-inverse` | `#141413` |
+| Primary button text | `--color-text-inverse` | `#FFFFFF` |
+| Success bg | `--color-background-success` | `#E9F1DC` |
+| Success text | `--color-text-success` | `#265B19` |
+| Danger bg | `--color-background-danger` | `#F7ECEC` |
+| Danger text | `--color-text-danger` | `#7F2C28` |
+| Warning bg | `--color-background-warning` | `#F6EEDF` |
+| Warning text | `--color-text-warning` | `#5A4815` |
+| Info bg | `--color-background-info` | `#D6E4F6` |
+| Info text | `--color-text-info` | `#3266AD` |
+
+**Typography scale** (three-level, two-weight per guidelines):
+- Heading: `font-heading-lg-size` (20px), `font-weight-semibold` (600)
+- Body: `font-text-md-size` (16px), `font-weight-normal` (400)
+- Caption: `font-text-sm-size` (14px), `font-weight-normal` (400)
+- Font family: `"Anthropic Sans, system-ui, sans-serif"`
+
+**Radius**: `border-radius-md` (8px) for cards/inputs/buttons; `border-radius-sm` (6px) for badges/chips; `border-radius-full` (9999px) for pill badges.
+
+**Shadows**: `shadow-sm` for cards; `shadow-md` for dropdowns/modals.
+
+### Component Inventory per Page
+
+| Page | Key components needed |
+|---|---|
+| `AppLayout` | Header bar (inverse bg), nav user chip, sign-out button |
+| `LoginPage` | Card, text inputs, primary button, demo-user list buttons |
+| `SubmitClaimPage` | Form card, labeled inputs, select, file input, submit button, inline field errors, status badge (result) |
+| `ReviewQueuePage` | Table/list of claim rows, status badge, action link |
+| `ClaimDetailPage` (manager) | Detail card, policy-flag badge list, approve/reject buttons, textarea for note |
+| `AuditDashboardPage` | Filterable table, violation-type badge, investigate/clear action buttons |
+| `AuditClaimDetailPage` | Detail card, violation flag cards, action buttons |
+| `PolicyConfigPage` | Settings table/form, editable threshold inputs, save button |
+| `NotificationBell` | Icon button, unread count badge, dropdown panel (card) |
