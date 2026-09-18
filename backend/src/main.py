@@ -1,6 +1,7 @@
 import logging
 import os
 import time
+from contextlib import asynccontextmanager
 from typing import List
 
 from fastapi import Depends, FastAPI, Request
@@ -15,7 +16,21 @@ from backend.src.models.expense_category import ExpenseCategory
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("expense_api")
 
-app = FastAPI(title="Expense Reimbursement API", version="0.1.0")
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Fix #65: validate critical env vars at startup before accepting any traffic
+    secret_key = os.environ.get("SECRET_KEY")
+    if not secret_key:
+        raise RuntimeError(
+            "SECRET_KEY environment variable is not set. "
+            "Set a strong random secret before starting the server."
+        )
+    logger.info("Startup checks passed.")
+    yield
+
+
+app = FastAPI(title="Expense Reimbursement API", version="0.1.0", lifespan=lifespan)
 
 ALLOWED_ORIGINS: List[str] = os.environ.get("ALLOWED_ORIGINS", "*").split(",")
 

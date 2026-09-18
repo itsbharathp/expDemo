@@ -8,7 +8,13 @@ from jose import JWTError, jwt
 
 from backend.src.models.user import CurrentUser, UserRole
 
-SECRET_KEY = os.environ.get("SECRET_KEY", "changeme")
+SECRET_KEY = os.environ.get("SECRET_KEY")
+# Fix #65: refuse to start with a missing secret key — no insecure default
+if not SECRET_KEY:
+    raise RuntimeError(
+        "SECRET_KEY environment variable is not set. "
+        "Set a strong random secret (e.g. `openssl rand -hex 32`) before starting the server."
+    )
 ALGORITHM = os.environ.get("ALGORITHM", "HS256")
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/token")
