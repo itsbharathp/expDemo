@@ -8,13 +8,15 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.src.models.expense_category import ExpenseCategory
-from backend.src.models.expense_claim import ExpenseClaim
+from backend.src.models.expense_claim import ClaimStatus, ExpenseClaim
 from backend.src.models.policy_rule import PolicyRule
 
 
 class PolicyEngineService:
-    _cache: dict[str, Any] = {}
-    _cache_checked_at: Optional[datetime] = None
+    def __init__(self) -> None:
+        # Fix #62: instance-level cache to avoid shared mutable state across instances
+        self._cache: dict[str, Any] = {}
+        self._cache_checked_at: Optional[datetime] = None
 
     async def _load_rules(self, db: AsyncSession) -> None:
         result = await db.execute(
@@ -101,7 +103,8 @@ class PolicyEngineService:
                               "message": "Expense incurred on a weekend requires manager review"})
                 return ("require_review", flags)
 
-        # 5. Duplicate detection (7-day window)
+        # 5. Duplicate detection (7-day window) — excludes rejected claims so
+        #    legitimate resubmissions are not incorrectly flagged (Fix #63)
         window_start = expense_date - timedelta(days=7)
         dup_result = await db.execute(
             select(ExpenseClaim).where(
@@ -110,6 +113,7 @@ class PolicyEngineService:
                 ExpenseClaim.merchant_name == merchant_name,
                 ExpenseClaim.expense_date >= window_start,
                 ExpenseClaim.expense_date <= expense_date,
+                ExpenseClaim.status != ClaimStatus.rejected,
             )
         )
         if dup_result.scalar_one_or_none() is not None:

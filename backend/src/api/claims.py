@@ -35,6 +35,7 @@ async def submit_claim(
 
     claim = await _claim_svc.submit_claim(
         employee_id=current_user.id,
+        manager_id=current_user.manager_id,
         amount=Decimal(str(amount)),
         currency=currency,
         expense_date=expense_date,

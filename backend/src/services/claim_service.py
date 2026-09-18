@@ -22,6 +22,7 @@ class ClaimService:
     async def submit_claim(
         self,
         employee_id: UUID,
+        manager_id: Optional[UUID],
         amount: Decimal,
         currency: str,
         expense_date: date,
@@ -54,6 +55,7 @@ class ClaimService:
         claim = ExpenseClaim(
             id=uuid.uuid4(),
             employee_id=employee_id,
+            manager_id=manager_id,
             amount=amount,
             currency=currency,
             expense_date=expense_date,
@@ -103,7 +105,7 @@ class ClaimService:
             select(ExpenseClaim)
             .where(
                 ExpenseClaim.status == ClaimStatus.pending_review,
-                ExpenseClaim.employee_id != manager_id,
+                ExpenseClaim.manager_id == manager_id,
             )
             .order_by(ExpenseClaim.submitted_at.asc())
         )
@@ -121,6 +123,13 @@ class ClaimService:
         claim = result.scalar_one_or_none()
         if not claim:
             raise HTTPException(status_code=404, detail="Claim not found")
+
+        # Fix #61: verify the acting manager is the one assigned to this claim
+        if claim.manager_id != actor_id:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="You are not the assigned manager for this claim",
+            )
 
         flags_result = await db.execute(
             select(ViolationFlag).where(ViolationFlag.claim_id == claim_id)
